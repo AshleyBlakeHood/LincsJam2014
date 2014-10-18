@@ -71,11 +71,11 @@ public class JokeScraper
 		
 		for (int i = 0; i < jokeArray.Length; i++)
 		{
-			string[] jokeLines = lineSplit[i].Split (',');
+			string[] jokeLines = lineSplit[i].Split (new string[] {","}, System.StringSplitOptions.RemoveEmptyEntries);
 
 			for (int l = 0; l < jokeLines.Length; l++)
 			{
-				jokeLines[l] = jokeLines[l].Replace ("[COMMA]", ",");
+				jokeLines[l] = jokeLines[l].Replace ("[COMMA]", ",").Replace ("[QUOTE]", "\"");
 			}
 
 			jokeArray[i] = new Joke(jokeLines);
