@@ -5,38 +5,38 @@ using System.Collections.Generic;
 public class CameraMovement : MonoBehaviour {
 
 	public List<Camera> listocameras;
-	int currentCamera;
+	public int currentCamera;
+	public bool canMoveCamera;
 
 	// Use this for initialization
 	void Start () {
-	
+		canMoveCamera = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.Alpha1))
-		{
-			currentCamera = 0;
-			setCamera();
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			currentCamera = 1;
-			setCamera();
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha3))
-		{
-			currentCamera = 2;
-			setCamera();
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha4))
-		{
-			currentCamera = 3;
-			setCamera();
-		}
+
+		if (canMoveCamera) {
+						if (Input.GetKeyDown (KeyCode.Alpha1)) {
+								currentCamera = 0;
+								setCamera ();
+						}
+						if (Input.GetKeyDown (KeyCode.Alpha2)) {
+								currentCamera = 1;
+								setCamera ();
+						}
+						if (Input.GetKeyDown (KeyCode.Alpha3)) {
+								currentCamera = 2;
+								setCamera ();
+						}
+						if (Input.GetKeyDown (KeyCode.Alpha4)) {
+								currentCamera = 3;
+								setCamera ();
+						}
+				}
 	}
 
-	void setCamera()
+	public void setCamera()
 	{
 		for (int i = 0; i < listocameras.Count; i++) 
 		{
