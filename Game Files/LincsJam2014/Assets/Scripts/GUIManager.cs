@@ -11,6 +11,8 @@ public class GUIManager : MonoBehaviour
 
 	public Text lastSentence;
 
+	public Text score;
+
 	// Use this for initialization
 	void Start ()
 	{
