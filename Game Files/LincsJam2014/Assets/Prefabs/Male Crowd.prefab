@@ -89,7 +89,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400010}
   - 95: {fileID: 9500000}
-  - 114: {fileID: 11400002}
   m_Layer: 0
   m_Name: Clapping
   m_TagString: Untagged
@@ -115,8 +114,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_LocalRotation: {x: 0, y: -.276768267, z: 0, w: .960936785}
-  m_LocalPosition: {x: 7.2493329, y: 1.56900001, z: 1.13534582}
+  m_LocalRotation: {x: 0, y: -.31773746, z: 0, w: .948178768}
+  m_LocalPosition: {x: 7.2493, y: 3.31060004, z: 1.13530004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -195,17 +194,6 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cb6a868605924a40a6a46e1f512134b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &11400002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100010}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cb6a868605924a40a6a46e1f512134b, type: 3}
