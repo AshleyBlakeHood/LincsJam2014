@@ -13,6 +13,9 @@ public class GUIManager : MonoBehaviour
 
 	public Text score;
 
+	public Text successfulJokes;
+	public Text unsuccessfulJokes;
+
 	// Use this for initialization
 	void Start ()
 	{

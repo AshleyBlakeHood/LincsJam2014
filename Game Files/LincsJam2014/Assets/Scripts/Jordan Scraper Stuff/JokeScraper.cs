@@ -65,7 +65,7 @@ public class JokeScraper
 	public Joke[] GetJokes(TextAsset csvFile)
 	{
 		//Split Lines
-		string[] lineSplit = csvFile.text.Split (new string[] {System.Environment.NewLine}, System.StringSplitOptions.RemoveEmptyEntries);
+		string[] lineSplit = csvFile.text.Split (new string[] {System.Environment.NewLine, "\n", "\r\n"}, System.StringSplitOptions.RemoveEmptyEntries);
 
 		Joke[] jokeArray = new Joke[lineSplit.Length];
 		
@@ -86,16 +86,16 @@ public class JokeScraper
 
 	public string CleanLine(string s)
 	{
-		s = s.Replace ("&#039;", "'");
-		s = s.Replace ("&lt;", "");
-		s = s.Replace ("p align=&amp;", "");
-		s = s.Replace ("quot;left", "");
-		s = s.Replace ("&gt;", "");
-		s = s.Replace ("quot;", "");
-		s = s.Replace (";BRBR&amp;", "");
-		s = s.Replace ("\" />", "");
-		s = s.Replace ("&amp;", "");
-		s = s.Replace (";BRBR", "");
+//		s = s.Replace ("&#039;", "'");
+//		s = s.Replace ("&lt;", "");
+//		s = s.Replace ("p align=&amp;", "");
+//		s = s.Replace ("quot;left", "");
+//		s = s.Replace ("&gt;", "");
+//		s = s.Replace ("quot;", "");
+//		s = s.Replace (";BRBR&amp;", "");
+//		s = s.Replace ("\" />", "");
+//		s = s.Replace ("&amp;", "");
+//		s = s.Replace (";BRBR", "");
 		return s;
 	}
 }

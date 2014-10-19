@@ -23,6 +23,14 @@ public class JokeManager : MonoBehaviour
 
 	public Image timeLimitImage;
 
+	public int jokeCount = 0;
+	public bool selectingJoke = true;
+
+	private int[] currentIndexes = new int[4];
+
+	private int succesfulJokes = 0;
+	private int unsuccesfulJokes = 0;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -32,8 +40,8 @@ public class JokeManager : MonoBehaviour
 
 		//jokes.AddRange (js.GetJokes ("http://jokes.cc.com/funny-police---military"));
 		currentJoke = Random.Range (0, jokes[chosenCategory].jokes.Length);
-		GiveWrongJokesNewValues ();
-		UpdateChoiceGUI ();
+
+		GetAllCorrectChoices ();
 	}
 	
 	// Update is called once per frame
@@ -44,27 +52,22 @@ public class JokeManager : MonoBehaviour
 			//Lose Points
 			
 			//Reset Jokes
-			currentJoke = Random.Range (0, jokes [chosenCategory].jokes.Length);
-			currentLineInJoke = 1;
+			//ResetJoke ();
 
 			timeLimitImage.rectTransform.sizeDelta = new Vector2(tickerStartWidth, timeLimitImage.rectTransform.rect.height);
 
-			if (currentLineInJoke >= jokes[chosenCategory].jokes[currentJoke].lines.Length)
-			{
-				currentJoke = Random.Range (0, jokes [chosenCategory].jokes.Length);
-				currentLineInJoke = 1;
-			}
-			
-			GiveWrongJokesNewValues ();
-			UpdateChoiceGUI ();
-		}
-	}
+			GetAllCorrectChoices ();
 
-	void FixedUpdate()
-	{
-		//rectTransform.sizeDelta = new Vector2( yourWidth, yourHeight);
-		timeLimitImage.rectTransform.sizeDelta = new Vector2(timeLimitImage.rectTransform.rect.width - Time.deltaTime * 50, timeLimitImage.rectTransform.rect.height);
-		//timeLimitImage.rectTransform.rect.width = timeLimitImage.rectTransform.rect.width + Time.deltaTime * 5;
+			unsuccesfulJokes++;
+			guiManager.unsuccessfulJokes.text = "Unsuccessful Jokes: " + unsuccesfulJokes;
+
+//			if (currentLineInJoke >= jokes[chosenCategory].jokes[currentJoke].lines.Length)
+//			{
+//				ResetJoke ();
+//			}
+//
+//			UpdateChoices ();
+		}
 	}
 
 	private void LoadHahaFiles()
@@ -79,6 +82,7 @@ public class JokeManager : MonoBehaviour
 		for (int i = 0; i < jokes.Length; i++)
 		{
 			jokes[i] = new JokeContainer(hahaFiles[i].name, js.GetJokes (hahaFiles[i]));
+			jokeCount += jokes[i].jokes.Length;
 		}
 
 		chosenCategory = Random.Range (0, jokes.Length);
@@ -92,6 +96,37 @@ public class JokeManager : MonoBehaviour
 //		string output = string.Format ("Line {5} of {6}\nLine just Spoken: {4}\n\nCorrect Joke: {0}\nWrong Joke 1: {1}\nWrong Joke 2: {2}\nWrong Joke 3: {3}", correctJoke, wrongJokes [0], wrongJokes [1], wrongJokes [2], lastJoke, currentLineInJoke - 1, jokes [currentJoke].lines.Length - 1);
 //
 //		GUI.Label (new Rect (0, 0, Screen.width, Screen.height), output);
+	}
+
+	public void GetAllCorrectChoices()
+	{
+		selectingJoke = true;
+		currentLineInJoke = 0;
+
+		int jokeLine = Random.Range (0, jokes[chosenCategory].jokes.Length);
+		wrongJokes [0] = jokes [chosenCategory].jokes[jokeLine].lines [0];
+		currentIndexes [0] = jokeLine;
+
+		jokeLine = Random.Range (0, jokes[chosenCategory].jokes.Length);
+		wrongJokes [1] = jokes [chosenCategory].jokes[jokeLine].lines [0];
+		currentIndexes [1] = jokeLine;
+		
+		jokeLine = Random.Range (0, jokes[chosenCategory].jokes.Length);
+		wrongJokes [2] = jokes [chosenCategory].jokes[jokeLine].lines [0];
+		currentIndexes [2] = jokeLine;
+		
+		jokeLine = Random.Range (0, jokes[chosenCategory].jokes.Length);
+		wrongJokes [3] = jokes [chosenCategory].jokes[jokeLine].lines [0];
+		currentIndexes [3] = jokeLine;
+
+		guiManager.topLeftPanel.GetComponentInChildren<Button>().gameObject.GetComponentInChildren<Text>().text = wrongJokes[0];
+		guiManager.topRightPanel.GetComponentInChildren<Button>().gameObject.GetComponentInChildren<Text>().text = wrongJokes[1];
+		guiManager.bottomLeftPanel.GetComponentInChildren<Button>().gameObject.GetComponentInChildren<Text>().text = wrongJokes[2];
+		guiManager.bottomRightPanel.GetComponentInChildren<Button>().gameObject.GetComponentInChildren<Text>().text = wrongJokes[3];
+
+		guiManager.lastSentence.text = "";
+
+		timeLimitImage.rectTransform.sizeDelta = new Vector2(tickerStartWidth, timeLimitImage.rectTransform.rect.height);
 	}
 
 	public void GiveWrongJokesNewValues()
@@ -117,8 +152,11 @@ public class JokeManager : MonoBehaviour
 		wrongJokes [3] = jokes [chosenCategory].jokes[jokeLine].lines [sentencePos];
 	}
 
-	public void UpdateChoiceGUI()
+	public void UpdateChoices()
 	{
+		//Update Wrong Answers
+		GiveWrongJokesNewValues ();
+
 		string correctJoke = jokes [chosenCategory].jokes [currentJoke].lines [currentLineInJoke];
 		correctChoice = Random.Range (0, 4);
 
@@ -143,29 +181,52 @@ public class JokeManager : MonoBehaviour
 			break;
 		}
 
-		guiManager.lastSentence.text = jokes [chosenCategory].jokes [currentJoke].lines [currentLineInJoke - 1];
+		if (currentLineInJoke > 0)
+			guiManager.lastSentence.text = jokes [chosenCategory].jokes [currentJoke].lines [currentLineInJoke - 1];
+		else
+			guiManager.lastSentence.text = "";
+
+		timeLimitImage.rectTransform.sizeDelta = new Vector2(tickerStartWidth, timeLimitImage.rectTransform.rect.height);
 	}
 
 	public void ButtonPress(int choice)
 	{
 		currentLineInJoke++;
 
-		if (choice != correctChoice)
+		if (selectingJoke)
 		{
-			//Lose Points
-
-			//Reset Jokes
-			currentJoke = Random.Range (0, jokes [chosenCategory].jokes.Length);
-			currentLineInJoke = 1;
+			currentJoke = currentIndexes[choice];
+			selectingJoke = false;
+		}
+		else
+		{
+			if (choice != correctChoice)
+			{
+				//Lose Points
+				unsuccesfulJokes++;
+				guiManager.unsuccessfulJokes.text = "Unsuccessful Jokes: " + unsuccesfulJokes;
+				//Reset Jokes
+				GetAllCorrectChoices ();
+			}
 		}
 
 		if (currentLineInJoke >= jokes[chosenCategory].jokes[currentJoke].lines.Length)
 		{
-			currentJoke = Random.Range (0, jokes [chosenCategory].jokes.Length);
-			currentLineInJoke = 1;
+			succesfulJokes++;
+
+			guiManager.successfulJokes.text = "Successful Jokes: " + succesfulJokes;
+
+			GetAllCorrectChoices ();
 		}
-		
-		GiveWrongJokesNewValues ();
-		UpdateChoiceGUI ();
+		else
+			UpdateChoices ();
+	}
+
+	public void ResetJoke()
+	{
+		timeLimitImage.rectTransform.sizeDelta = new Vector2(tickerStartWidth, timeLimitImage.rectTransform.rect.height);
+
+		currentJoke = Random.Range (0, jokes [chosenCategory].jokes.Length);
+		currentLineInJoke = 1;
 	}
 }
