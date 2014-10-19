@@ -229,17 +229,17 @@ public class CharBuildScript : MonoBehaviour
 		case 0:
 			mLegIndex++;
 			
-			if (mTorsoIndex > maleLegs.Length - 1)
+			if (mLegIndex > maleLegs.Length - 1)
 			{
-				mTorsoIndex = maleLegs.Length - 1;
+				mLegIndex = maleLegs.Length - 1;
 			}
 			break;
 		case 1:
 			fLegIndex++;
 			
-			if (fTorsoIndex > femaleLegs.Length - 1)
+			if (fLegIndex > femaleLegs.Length - 1)
 			{
-				fTorsoIndex = femaleLegs.Length - 1;
+				fLegIndex = femaleLegs.Length - 1;
 			}
 			break;
 		}
@@ -461,5 +461,10 @@ public class CharBuildScript : MonoBehaviour
 			femaleTemplate.SetActive (false);
 			gender = 0;
 		}
+	}
+
+	public void BackToMenu()
+	{
+		Application.LoadLevel ("MainMenu");
 	}
 }
