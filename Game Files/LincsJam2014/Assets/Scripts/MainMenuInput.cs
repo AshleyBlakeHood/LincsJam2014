@@ -26,7 +26,7 @@ public class MainMenuInput : MonoBehaviour {
 				spot1.enabled = false;
 				if(Input.GetMouseButtonDown(0))
 				{
-					Application.LoadLevel(3);
+					Application.LoadLevel("CharacterBuilding");
 				}
 			}
 			else if(rayHit.collider == quit.GetComponent<MeshCollider>())
