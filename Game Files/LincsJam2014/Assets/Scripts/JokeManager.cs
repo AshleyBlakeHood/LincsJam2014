@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 public class JokeManager : MonoBehaviour
 {
+	CameraMovement cm;
+
+	public CrowdManager crowdManager;
+
 	public TextAsset[] textAssetJokes;
 
 	public JokeContainer[] jokes;
@@ -31,9 +35,15 @@ public class JokeManager : MonoBehaviour
 	private int succesfulJokes = 0;
 	private int unsuccesfulJokes = 0;
 
+	private int weighting = 0;
+
+	public bool gameEnded = false;
+
 	// Use this for initialization
 	void Start ()
 	{
+		cm = GetComponent<CameraMovement> ();
+
 		LoadHahaFiles ();
 
 		JokeScraper js = new JokeScraper ();
@@ -59,8 +69,9 @@ public class JokeManager : MonoBehaviour
 			GetAllCorrectChoices ();
 
 			unsuccesfulJokes++;
+			weighting--;
 			guiManager.unsuccessfulJokes.text = "Unsuccessful Jokes: " + unsuccesfulJokes;
-
+			CheckEndGame ();
 //			if (currentLineInJoke >= jokes[chosenCategory].jokes[currentJoke].lines.Length)
 //			{
 //				ResetJoke ();
@@ -85,7 +96,7 @@ public class JokeManager : MonoBehaviour
 			jokeCount += jokes[i].jokes.Length;
 		}
 
-		chosenCategory = Random.Range (0, jokes.Length);
+		chosenCategory = PlayerPrefs.GetInt ("Category");
 		Debug.Log (jokes [chosenCategory].jokeTitle);
 	}
 
@@ -100,6 +111,11 @@ public class JokeManager : MonoBehaviour
 
 	public void GetAllCorrectChoices()
 	{
+		if (gameEnded)
+			return;
+
+		cm.setCamera (Random.Range (0, 4));
+
 		selectingJoke = true;
 		currentLineInJoke = 0;
 
@@ -131,6 +147,9 @@ public class JokeManager : MonoBehaviour
 
 	public void GiveWrongJokesNewValues()
 	{
+		if (gameEnded)
+			return;
+
 		int jokeLine = Random.Range (0, jokes[chosenCategory].jokes.Length);
 		int sentencePos = Random.Range (0, jokes [chosenCategory].jokes [jokeLine].lines.Length);
 
@@ -154,6 +173,9 @@ public class JokeManager : MonoBehaviour
 
 	public void UpdateChoices()
 	{
+		if (gameEnded)
+			return;
+
 		//Update Wrong Answers
 		GiveWrongJokesNewValues ();
 
@@ -204,7 +226,9 @@ public class JokeManager : MonoBehaviour
 			{
 				//Lose Points
 				unsuccesfulJokes++;
+				weighting--;
 				guiManager.unsuccessfulJokes.text = "Unsuccessful Jokes: " + unsuccesfulJokes;
+				CheckEndGame ();
 				//Reset Jokes
 				GetAllCorrectChoices ();
 			}
@@ -213,8 +237,10 @@ public class JokeManager : MonoBehaviour
 		if (currentLineInJoke >= jokes[chosenCategory].jokes[currentJoke].lines.Length)
 		{
 			succesfulJokes++;
-
+			weighting++;
 			guiManager.successfulJokes.text = "Successful Jokes: " + succesfulJokes;
+			CheckEndGame ();
+			crowdManager.MakeAllClap ();
 
 			GetAllCorrectChoices ();
 		}
@@ -228,5 +254,29 @@ public class JokeManager : MonoBehaviour
 
 		currentJoke = Random.Range (0, jokes [chosenCategory].jokes.Length);
 		currentLineInJoke = 1;
+	}
+
+	public void CheckEndGame()
+	{
+		if (weighting >= 3)
+		{
+			//WinGame
+		}
+		else if (weighting <= -3)
+		{
+			EndGame ();
+		}
+	}
+
+	void EndGame()
+	{
+		gameEnded = true;
+
+		timeLimitImage.transform.parent.GetComponent<Canvas> ().gameObject.SetActive (false);
+
+		gameObject.GetComponent<CameraMovement> ().currentCamera = 1;
+		gameObject.GetComponent<CameraMovement> ().setCamera (1);
+		gameObject.GetComponent<CameraMovement> ().canMoveCamera = false;
+		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (1);
 	}
 }

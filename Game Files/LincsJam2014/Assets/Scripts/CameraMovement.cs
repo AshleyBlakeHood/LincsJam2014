@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class CameraMovement : MonoBehaviour {
 
+	JokeManager jm;
 	public List<Camera> listocameras;
 	public int currentCamera;
 	public bool canMoveCamera;
@@ -11,33 +12,35 @@ public class CameraMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		canMoveCamera = true;
+		jm = GetComponent<JokeManager> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
+		if (jm.gameEnded)
+			return;
 
 		if (canMoveCamera) {
 						if (Input.GetKeyDown (KeyCode.Alpha1)) {
-								currentCamera = 0;
-								setCamera ();
+								setCamera (0);
 						}
 						if (Input.GetKeyDown (KeyCode.Alpha2)) {
-								currentCamera = 1;
-								setCamera ();
+								setCamera (1);
 						}
 						if (Input.GetKeyDown (KeyCode.Alpha3)) {
-								currentCamera = 2;
-								setCamera ();
+								setCamera (2);
 						}
 						if (Input.GetKeyDown (KeyCode.Alpha4)) {
-								currentCamera = 3;
-								setCamera ();
+								setCamera (3);
 						}
 				}
 	}
 
-	public void setCamera()
+	public void setCamera(int camera)
 	{
+		currentCamera = camera;
+
 		for (int i = 0; i < listocameras.Count; i++) 
 		{
 			if(i == currentCamera)
