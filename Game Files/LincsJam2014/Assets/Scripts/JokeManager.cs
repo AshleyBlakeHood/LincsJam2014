@@ -39,6 +39,10 @@ public class JokeManager : MonoBehaviour
 
 	public bool gameEnded = false;
 
+	public GameObject throwingFoot;
+
+	public AudioClip[] hecklerAudio;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -52,6 +56,8 @@ public class JokeManager : MonoBehaviour
 		currentJoke = Random.Range (0, jokes[chosenCategory].jokes.Length);
 
 		GetAllCorrectChoices ();
+
+		hecklerAudio = Resources.LoadAll<AudioClip>("");
 	}
 	
 	// Update is called once per frame
@@ -71,13 +77,22 @@ public class JokeManager : MonoBehaviour
 			unsuccesfulJokes++;
 			weighting--;
 			guiManager.unsuccessfulJokes.text = "Unsuccessful Jokes: " + unsuccesfulJokes;
+			SpawnFoot();
+			PlayHeckle();
 			CheckEndGame ();
+
+
 //			if (currentLineInJoke >= jokes[chosenCategory].jokes[currentJoke].lines.Length)
 //			{
 //				ResetJoke ();
 //			}
 //
 //			UpdateChoices ();
+		}
+
+		if(Input.GetKeyDown(KeyCode.A))
+		{
+			PlayHeckle();
 		}
 	}
 
@@ -231,6 +246,8 @@ public class JokeManager : MonoBehaviour
 				CheckEndGame ();
 				//Reset Jokes
 				GetAllCorrectChoices ();
+				SpawnFoot();
+				PlayHeckle();
 			}
 		}
 
@@ -260,7 +277,7 @@ public class JokeManager : MonoBehaviour
 	{
 		if (weighting >= 3)
 		{
-			//WinGame
+			WinGame ();
 		}
 		else if (weighting <= -3)
 		{
@@ -270,6 +287,7 @@ public class JokeManager : MonoBehaviour
 
 	void EndGame()
 	{
+		Debug.Log ("GAME LOSS");
 		gameEnded = true;
 
 		timeLimitImage.transform.parent.GetComponent<Canvas> ().gameObject.SetActive (false);
@@ -278,5 +296,35 @@ public class JokeManager : MonoBehaviour
 		gameObject.GetComponent<CameraMovement> ().setCamera (1);
 		gameObject.GetComponent<CameraMovement> ().canMoveCamera = false;
 		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (1);
+	}
+
+	void WinGame()
+	{
+		Debug.Log ("GAME WIN");
+		gameEnded = true;
+
+		timeLimitImage.transform.parent.GetComponent<Canvas> ().gameObject.SetActive (false);
+		
+		gameObject.GetComponent<CameraMovement> ().currentCamera = 1;
+		gameObject.GetComponent<CameraMovement> ().setCamera (1);
+		gameObject.GetComponent<CameraMovement> ().canMoveCamera = false;
+		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (1);
+
+	}
+
+	void SpawnFoot()
+	{
+		int rand = Random.Range(2,20);
+		for(int i = 0; i<rand; i++)
+		{
+			Instantiate(throwingFoot);
+		}
+	}
+
+	void PlayHeckle()
+	{
+		Debug.Log ("Playing heckle");
+		gameObject.GetComponent<AudioSource> ().clip = hecklerAudio [Random.Range (0, hecklerAudio.Length)];
+		gameObject.GetComponent<AudioSource> ().Play();
 	}
 }

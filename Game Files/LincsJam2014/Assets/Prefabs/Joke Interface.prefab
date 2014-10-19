@@ -897,7 +897,7 @@ Canvas:
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
 --- !u!224 &22400000
 RectTransform:
   m_ObjectHideFlags: 1
@@ -1023,11 +1023,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22400000}
   m_RootOrder: 5
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: .5, y: 13.3809996}
-  m_SizeDelta: {x: -1, y: -439}
-  m_Pivot: {x: .5, y: .5}
+  m_AnchorMin: {x: 0, y: .449392498}
+  m_AnchorMax: {x: 1, y: .639345884}
+  m_AnchoredPosition: {x: .500020027, y: -7.51592827}
+  m_SizeDelta: {x: -1, y: -3}
+  m_Pivot: {x: .5, y: 2.18125629}
 --- !u!224 &22400014
 RectTransform:
   m_ObjectHideFlags: 1

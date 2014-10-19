@@ -13,9 +13,11 @@ public class ThrowAnim : MonoBehaviour {
 	public Transform target;
 	public float smooth = 5.0F;
 
+	float cumTime;
+
 	void Start () {
 		int x = Random.Range (0, GameObject.FindGameObjectWithTag ("Crowd Manager").GetComponent<CrowdManager> ().crowd.Count);
-		startMarker = GameObject.FindGameObjectWithTag ("Crowd Manager").GetComponent<CrowdManager> ().crowd [x].transform;
+		startMarker = GameObject.FindGameObjectWithTag ("Crowd Manager").GetComponent<CrowdManager> ().crowd [x].transform ;
 		endMarker = GameObject.Find ("EndPoint").gameObject.transform;
 		Debug.Log (x);
 		startTime = Time.time;
@@ -25,5 +27,13 @@ public class ThrowAnim : MonoBehaviour {
 		float distCovered = (Time.time - startTime) * speed;
 		float fracJourney = distCovered / journeylength;
 		transform.position = Vector3.Lerp (startMarker.position, endMarker.position, fracJourney);
+
+		//if (transform.position.z < endMarker.position.z - 1)
+						//Destroy (gameObject);
+		
+
+		cumTime += Time.deltaTime;
+		if (cumTime > 10)
+						Destroy (gameObject);
 	}
 }
