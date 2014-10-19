@@ -39,26 +39,10 @@ public class CharBuildScript : MonoBehaviour
 
 	public Button genderButton;
 
-	public Text category;
-	public Button leftCategory;
-	public Button rightCategory;
-
-	public JokeContainer[] jokes;
-	int position = 0;
-
-	public int jokeCount = 0;
-
 	// Use this for initialization
 	void Start () {
 		PlayerPrefs.SetInt ("Category", 0);
 
-<<<<<<< HEAD
-		headIndex = PlayerPrefs.GetInt("headIndex");
-		torsoIndex = PlayerPrefs.GetInt("torsoIndex");
-		legIndex = PlayerPrefs.GetInt("legIndex");
-		eyeIndex = PlayerPrefs.GetInt ("eyeIndex");
-		mouthIndex = PlayerPrefs.GetInt ("mouthIndex");
-=======
 		mHeadIndex = 0;
 		mTorsoIndex = 0;
 		mLegIndex = 0;
@@ -111,15 +95,11 @@ public class CharBuildScript : MonoBehaviour
 		
 		femaleFeets = Resources.LoadAll<Sprite>(@"Characters/Female/Feet");
 		
->>>>>>> origin/Jordan
 		updateHead ();
 		updateLeg ();
 		updateTorso ();
 		updateEye ();
 		updateMouth ();
-
-		LoadHahaFiles ();
-		category.text = jokes [0].jokeTitle;
 	}
 
 	public void headLeft()
@@ -415,9 +395,6 @@ public class CharBuildScript : MonoBehaviour
 
 	public void NextCategory()
 	{
-<<<<<<< HEAD
-		//eyeImage.GetComponent<Image> ().sprite = eyeList [eyeIndex];
-=======
 		position++;
 
 		leftCategory.GetComponent<Button>().interactable = true;
@@ -429,14 +406,10 @@ public class CharBuildScript : MonoBehaviour
 		}
 
 		UpdateCategoryLabel ();
->>>>>>> origin/Jordan
 	}
 
 	public void PreviousCategory()
 	{
-<<<<<<< HEAD
-		//mouthImage.GetComponent<Image> ().sprite = mouthList [mouthIndex];
-=======
 		position--;
 
 		rightCategory.GetComponent<Button>().interactable = true;
@@ -448,7 +421,6 @@ public class CharBuildScript : MonoBehaviour
 		}
 
 		UpdateCategoryLabel ();
->>>>>>> origin/Jordan
 	}
 
 	public void UpdateCategoryLabel()
@@ -459,13 +431,6 @@ public class CharBuildScript : MonoBehaviour
 
 	public void ChangeGender()
 	{
-<<<<<<< HEAD
-		PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
-		if (PlayerPrefs.GetString ("selectedLevel") == "")
-						PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
-		Debug.Log (PlayerPrefs.GetString ("selectedLevel"));
-		Application.LoadLevel(PlayerPrefs.GetString("selectedLevel"));
-=======
 		if (gender == 0)
 		{
 			mHeadIndex = 0;
@@ -496,58 +461,5 @@ public class CharBuildScript : MonoBehaviour
 			femaleTemplate.SetActive (false);
 			gender = 0;
 		}
->>>>>>> origin/Jordan
-	}
-
-	private void LoadHahaFiles()
-	{
-		TextAsset[] hahaFiles = Resources.LoadAll<TextAsset> ("Haha Files");
-		Debug.Log (hahaFiles.Length);
-		
-		JokeScraper js = new JokeScraper ();
-		
-		jokes = new JokeContainer[hahaFiles.Length];
-		
-		for (int i = 0; i < jokes.Length; i++)
-		{
-			jokes[i] = new JokeContainer(hahaFiles[i].name, js.GetJokes (hahaFiles[i]));
-			jokeCount += jokes[i].jokes.Length;
-		}
-	}
-
-	public void NextCategory()
-	{
-		position++;
-
-		leftCategory.GetComponent<Button>().interactable = true;
-
-		if (position >= jokes.Length)
-		{
-			position = jokes.Length - 1;
-			rightCategory.GetComponent<Button>().interactable = false;
-		}
-
-		UpdateCategoryLabel ();
-	}
-
-	public void PreviousCategory()
-	{
-		position--;
-
-		rightCategory.GetComponent<Button>().interactable = true;
-
-		if (position < 0)
-		{
-			position = 0;
-			leftCategory.GetComponent<Button>().interactable = false;
-		}
-
-		UpdateCategoryLabel ();
-	}
-
-	public void UpdateCategoryLabel()
-	{
-		category.text = jokes [position].jokeTitle;
-		PlayerPrefs.SetInt ("Category", position);
 	}
 }

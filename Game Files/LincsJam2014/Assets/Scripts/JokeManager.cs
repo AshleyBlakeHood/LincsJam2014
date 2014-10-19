@@ -9,6 +9,9 @@ public class JokeManager : MonoBehaviour
 
 	public CrowdManager crowdManager;
 
+	public GameObject maleTemplate;
+	public GameObject femaleTemplate;
+
 	public TextAsset[] textAssetJokes;
 
 	public JokeContainer[] jokes;
@@ -58,6 +61,34 @@ public class JokeManager : MonoBehaviour
 		GetAllCorrectChoices ();
 
 		hecklerAudio = Resources.LoadAll<AudioClip>("");
+
+		if (PlayerPrefs.GetInt ("Gender") == 0)
+		{
+			maleTemplate.SetActive (true);
+
+			maleTemplate.transform.FindChild ("Head").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Male/Heads")[PlayerPrefs.GetInt ("HeadIndex")];
+
+			maleTemplate.transform.FindChild ("Neck").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Male/Neck")[0];
+			maleTemplate.transform.FindChild ("Torso").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Male/Torso")[PlayerPrefs.GetInt ("TorsoIndex")];
+			
+			maleTemplate.transform.FindChild ("Legs").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Male/Legs")[PlayerPrefs.GetInt ("LegsIndex")];
+			
+			maleTemplate.transform.FindChild ("Feet").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Male/Feet")[0];
+		}
+		else
+		{
+			femaleTemplate.SetActive (true);
+
+			//Female
+			femaleTemplate.transform.FindChild ("Head").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Female/Heads")[PlayerPrefs.GetInt ("HeadIndex")];
+			
+			femaleTemplate.transform.FindChild ("Neck").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Female/Neck")[0];
+			femaleTemplate.transform.FindChild ("Torso").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Female/Torso")[PlayerPrefs.GetInt ("TorsoIndex")];
+			
+			femaleTemplate.transform.FindChild ("Legs").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Female/Legs")[PlayerPrefs.GetInt ("LegsIndex")];
+			
+			femaleTemplate.transform.FindChild ("Feet").GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>(@"Characters/Female/Feet")[0];
+		}
 	}
 	
 	// Update is called once per frame
@@ -308,8 +339,17 @@ public class JokeManager : MonoBehaviour
 		gameObject.GetComponent<CameraMovement> ().currentCamera = 1;
 		gameObject.GetComponent<CameraMovement> ().setCamera (1);
 		gameObject.GetComponent<CameraMovement> ().canMoveCamera = false;
-		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (1);
+		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (0);
 
+		switch (PlayerPrefs.GetInt ("Gender"))
+		{
+		case 0:
+			maleTemplate.GetComponent<Animator>().enabled = true;
+			break;
+		case 1:
+			femaleTemplate.GetComponent<Animator>().enabled = true;
+			break;
+		}
 	}
 
 	void SpawnFoot()
