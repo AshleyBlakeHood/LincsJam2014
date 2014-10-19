@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EndGameScript : MonoBehaviour {
 
-	public GameObject theFoot;
+	public GameObject theFoot, kickingFoot;
 
 	// Use this for initialization
 	void Start () {
@@ -23,7 +23,8 @@ public class EndGameScript : MonoBehaviour {
 		} 
 		else 
 		{
-			//Kick
+			GameObject temp = Instantiate(kickingFoot, gameObject.transform.position, gameObject.transform.rotation) as GameObject;
+
 		}
 	}
 }
