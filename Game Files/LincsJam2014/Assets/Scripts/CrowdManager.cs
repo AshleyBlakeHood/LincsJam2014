@@ -15,21 +15,7 @@ public class CrowdManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		if (lastTime + 5 < Time.time)
-		{
-			lastTime = Time.time;
-			
-			if (clap)
-			{
-				MakeAllStop ();
-				clap = false;
-			}
-			else
-			{
-				MakeAllClap ();
-				clap = true;
-			}
-		}
+
 	}
 
 	public void MakeAllClap()
@@ -39,6 +25,8 @@ public class CrowdManager : MonoBehaviour {
 			crowd[i].transform.FindChild ("Static").gameObject.SetActive (false);
 			crowd[i].transform.FindChild ("Clapping").gameObject.SetActive (true);
 		}
+
+		StartCoroutine(StopAfterTime (1.23f));
 	}
 
 	public void MakeAllStop()
@@ -48,5 +36,11 @@ public class CrowdManager : MonoBehaviour {
 			crowd[i].transform.FindChild ("Static").gameObject.SetActive (true);
 			crowd[i].transform.FindChild ("Clapping").gameObject.SetActive (false);
 		}
+	}
+
+	IEnumerator StopAfterTime(float time)
+	{
+		yield return new WaitForSeconds(time);
+		MakeAllStop ();
 	}
 }

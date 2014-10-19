@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
 	void EndGame()
 	{
 		gameObject.GetComponent<CameraMovement> ().currentCamera = 1;
-		gameObject.GetComponent<CameraMovement> ().setCamera ();
+		gameObject.GetComponent<CameraMovement> ().setCamera (1);
 		gameObject.GetComponent<CameraMovement> ().canMoveCamera = false;
 		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (1);
 	}

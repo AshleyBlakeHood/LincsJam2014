@@ -10,8 +10,19 @@ public class CharBuildScript : MonoBehaviour {
 
 	public int headIndex, torsoIndex, legIndex, eyeIndex, mouthIndex;
 
+	public Text category;
+	public Button leftCategory;
+	public Button rightCategory;
+
+	public JokeContainer[] jokes;
+	int position = 0;
+
+	public int jokeCount = 0;
+
 	// Use this for initialization
 	void Start () {
+		PlayerPrefs.SetInt ("Category", 0);
+
 		headIndex = PlayerPrefs.GetInt("headIndex");
 		torsoIndex = PlayerPrefs.GetInt("torsoIndex");
 		legIndex = PlayerPrefs.GetInt("legIndex");
@@ -22,6 +33,9 @@ public class CharBuildScript : MonoBehaviour {
 		updateTorso ();
 		updateEye ();
 		updateMouth ();
+
+		LoadHahaFiles ();
+		category.text = jokes [0].jokeTitle;
 	}
 
 	public void headLeft()
@@ -178,11 +192,11 @@ public class CharBuildScript : MonoBehaviour {
 	}
 	void updateEye()
 	{
-		eyeImage.GetComponent<Image> ().sprite = eyeList [eyeIndex];
+		//eyeImage.GetComponent<Image> ().sprite = eyeList [eyeIndex];
 	}
 	void updateMouth()
 	{
-		mouthImage.GetComponent<Image> ().sprite = mouthList [mouthIndex];
+		//mouthImage.GetComponent<Image> ().sprite = mouthList [mouthIndex];
 	}
 
 	public void saveCharacter()
@@ -197,9 +211,62 @@ public class CharBuildScript : MonoBehaviour {
 
 	void goToGame()
 	{
+		PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
 		if (PlayerPrefs.GetString ("selectedLevel") == "")
-						PlayerPrefs.SetString ("selectedLevel", "ComedyClub");
+						PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
 		Debug.Log (PlayerPrefs.GetString ("selectedLevel"));
 		Application.LoadLevel(PlayerPrefs.GetString("selectedLevel"));
+	}
+
+	private void LoadHahaFiles()
+	{
+		TextAsset[] hahaFiles = Resources.LoadAll<TextAsset> ("Haha Files");
+		Debug.Log (hahaFiles.Length);
+		
+		JokeScraper js = new JokeScraper ();
+		
+		jokes = new JokeContainer[hahaFiles.Length];
+		
+		for (int i = 0; i < jokes.Length; i++)
+		{
+			jokes[i] = new JokeContainer(hahaFiles[i].name, js.GetJokes (hahaFiles[i]));
+			jokeCount += jokes[i].jokes.Length;
+		}
+	}
+
+	public void NextCategory()
+	{
+		position++;
+
+		leftCategory.GetComponent<Button>().interactable = true;
+
+		if (position >= jokes.Length)
+		{
+			position = jokes.Length - 1;
+			rightCategory.GetComponent<Button>().interactable = false;
+		}
+
+		UpdateCategoryLabel ();
+	}
+
+	public void PreviousCategory()
+	{
+		position--;
+
+		rightCategory.GetComponent<Button>().interactable = true;
+
+		if (position < 0)
+		{
+			position = 0;
+			leftCategory.GetComponent<Button>().interactable = false;
+		}
+
+		UpdateCategoryLabel ();
+	}
+
+	public void UpdateCategoryLabel()
+	{
+		category.text = jokes [position].jokeTitle;
+		PlayerPrefs.SetInt ("Category", position);
 	}
 }
