@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class CharBuildScript : MonoBehaviour {
+public class CharBuildScript : MonoBehaviour
+{
+	public GameObject maleTemplate;
+	public GameObject femaleTemplate;
 
-	public List<Sprite> headList, torsoList, legList, eyeList, mouthList;
+	//public List<Sprite> headList, torsoList, legList, eyeList, mouthList;
 	public GameObject headImage, torsoImage, legImage, eyeImage, mouthImage;
 
-	public int headIndex, torsoIndex, legIndex, eyeIndex, mouthIndex;
+	public int mHeadIndex, mTorsoIndex, mLegIndex;
+	public int fHeadIndex, fTorsoIndex, fLegIndex;
 
 	public Text category;
 	public Button leftCategory;
@@ -19,176 +23,320 @@ public class CharBuildScript : MonoBehaviour {
 
 	public int jokeCount = 0;
 
+	public Sprite[] maleHeads;
+	public Sprite[] maleNecks;
+	public Sprite[] maleTorsos;
+	public Sprite[] maleLegs;
+	public Sprite[] maleFeets;
+
+	public Sprite[] femaleHeads;
+	public Sprite[] femaleNecks;
+	public Sprite[] femaleTorsos;
+	public Sprite[] femaleLegs;
+	public Sprite[] femaleFeets;
+
+	public int gender = 0;
+
+	public Button genderButton;
+
 	// Use this for initialization
 	void Start () {
 		PlayerPrefs.SetInt ("Category", 0);
 
-		headIndex = PlayerPrefs.GetInt("headIndex");
-		torsoIndex = PlayerPrefs.GetInt("torsoIndex");
-		legIndex = PlayerPrefs.GetInt("legIndex");
-		eyeIndex = PlayerPrefs.GetInt ("eyeIndex");
-		mouthIndex = PlayerPrefs.GetInt ("mouthIndex");
+		mHeadIndex = 0;
+		mTorsoIndex = 0;
+		mLegIndex = 0;
+
+		fHeadIndex = 0;
+		fTorsoIndex = 0;
+		fLegIndex = 0;
+
+		LoadHahaFiles ();
+		category.text = jokes [0].jokeTitle;
+
+		Sprite[] tempMaleHeads = Resources.LoadAll<Sprite>(@"Characters/Male/Heads");
+		maleHeads = new Sprite[tempMaleHeads.Length / 4];
+
+		int counter = 0;
+		for (int i = 0; i < tempMaleHeads.Length; i++)
+		{
+			if (i % 4 == 0)
+			{
+				maleHeads[counter] = tempMaleHeads[i];
+				counter++;
+			}
+		}
+
+		maleNecks = Resources.LoadAll<Sprite>(@"Characters/Male/Neck");
+		maleTorsos = Resources.LoadAll<Sprite>(@"Characters/Male/Torso");
+
+		maleLegs = Resources.LoadAll<Sprite>(@"Characters/Male/Legs");
+
+		maleFeets = Resources.LoadAll<Sprite>(@"Characters/Male/Feet");
+
+		//Female
+		Sprite[] tempFemaleHeads = Resources.LoadAll<Sprite>(@"Characters/Female/Heads");
+		femaleHeads = new Sprite[tempFemaleHeads.Length / 4];
+
+		int fCounter = 0;
+		for (int i = 0; i < tempFemaleHeads.Length; i++)
+		{
+			if (i % 4 == 0)
+			{
+				femaleHeads[fCounter] = tempFemaleHeads[i];
+				fCounter++;
+			}
+		}
+		
+		femaleNecks = Resources.LoadAll<Sprite>(@"Characters/Female/Neck");
+		femaleTorsos = Resources.LoadAll<Sprite>(@"Characters/Female/Torso");
+		
+		femaleLegs = Resources.LoadAll<Sprite>(@"Characters/Female/Legs");
+		
+		femaleFeets = Resources.LoadAll<Sprite>(@"Characters/Female/Feet");
+		
 		updateHead ();
 		updateLeg ();
 		updateTorso ();
 		updateEye ();
 		updateMouth ();
-
-		LoadHahaFiles ();
-		category.text = jokes [0].jokeTitle;
 	}
 
 	public void headLeft()
 	{
-		Debug.Log ("Head Left");
-		if (headIndex != 0) 
+		switch (gender)
 		{
-			headIndex--;
-		} 
-		else 
-		{
-			headIndex = headList.Count-1;
+		case 0:
+			mHeadIndex--;
+
+			if (mHeadIndex <= 0)
+			{
+				mHeadIndex = 0;
+			}
+			break;
+		case 1:
+			fHeadIndex--;
+			
+			if (fHeadIndex <= 0)
+			{
+				fHeadIndex = 0;
+			}
+			break;
 		}
 		updateHead ();
 	}
 
 	public void headRight()
 	{
-		Debug.Log ("Head Right");
-		if (headIndex < headList.Count-1) 
+		switch (gender)
 		{
-			headIndex++;
-		} 
-		else 
-		{
-			headIndex = 0;
+		case 0:
+			mHeadIndex++;
+			
+			if (mHeadIndex > maleHeads.Length - 1)
+			{
+				mHeadIndex = maleHeads.Length - 1;
+			}
+			break;
+		case 1:
+			fHeadIndex++;
+			
+			if (fHeadIndex > femaleHeads.Length - 1)
+			{
+				fHeadIndex = femaleHeads.Length - 1;
+			}
+			break;
 		}
 		updateHead ();
 	}
 
 	public void torsoLeft()
 	{
-		Debug.Log ("Torso Left");
-		if (torsoIndex != 0) 
+		switch (gender)
 		{
-			torsoIndex--;
-		} 
-		else 
-		{
-			torsoIndex = torsoList.Count-1;
+		case 0:
+			mTorsoIndex--;
+			
+			if (mTorsoIndex <= 0)
+			{
+				mTorsoIndex = 0;
+			}
+			break;
+		case 1:
+			fTorsoIndex--;
+			
+			if (fTorsoIndex <= 0)
+			{
+				fTorsoIndex = 0;
+			}
+			break;
 		}
 		updateTorso ();
 	}
 
 	public void torsoRight()
 	{
-		Debug.Log ("Torso Right");
-		if (torsoIndex < torsoList.Count-1) 
+		switch (gender)
 		{
-			torsoIndex++;
-		} 
-		else 
-		{
-			torsoIndex = 0;
+		case 0:
+			mTorsoIndex++;
+			
+			if (mTorsoIndex > maleTorsos.Length - 1)
+			{
+				mTorsoIndex = maleTorsos.Length - 1;
+			}
+			break;
+		case 1:
+			fTorsoIndex++;
+			
+			if (fTorsoIndex > femaleTorsos.Length - 1)
+			{
+				fTorsoIndex = femaleTorsos.Length - 1;
+			}
+			break;
 		}
 		updateTorso ();
 	}
 
 	public void legLeft()
 	{
-		Debug.Log ("Leg Left");
-		if (legIndex != 0) 
+		switch (gender)
 		{
-			legIndex--;
-		} 
-		else 
-		{
-			legIndex = legList.Count-1;
+		case 0:
+			mLegIndex--;
+			
+			if (mLegIndex <= 0)
+			{
+				mLegIndex = 0;
+			}
+			break;
+		case 1:
+			fLegIndex--;
+			
+			if (fLegIndex <= 0)
+			{
+				fLegIndex = 0;
+			}
+			break;
 		}
 		updateLeg ();
 	}
 
 	public void legRight()
 	{
-		Debug.Log ("Leg Right");
-		if (legIndex < legList.Count-1) 
+		switch (gender)
 		{
-			legIndex++;
-		} 
-		else 
-		{
-			legIndex = 0;
+		case 0:
+			mLegIndex++;
+			
+			if (mTorsoIndex > maleLegs.Length - 1)
+			{
+				mTorsoIndex = maleLegs.Length - 1;
+			}
+			break;
+		case 1:
+			fLegIndex++;
+			
+			if (fTorsoIndex > femaleLegs.Length - 1)
+			{
+				fTorsoIndex = femaleLegs.Length - 1;
+			}
+			break;
 		}
 		updateLeg ();
 	}
 
-	public void eyeLeft()
-	{
-		Debug.Log ("eye Left");
-		if (eyeIndex != 0) 
-		{
-			eyeIndex--;
-		} 
-		else 
-		{
-			eyeIndex = eyeList.Count-1;
-		}
-		updateEye ();
-	}
-	
-	public void eyeRight()
-	{
-		Debug.Log ("eye Right");
-		if (eyeIndex < eyeList.Count-1) 
-		{
-			eyeIndex++;
-		} 
-		else 
-		{
-			eyeIndex = 0;
-		}
-		updateEye ();
-	}
-
-	public void mouthLeft()
-	{
-		Debug.Log ("mouth Left");
-		if (mouthIndex != 0) 
-		{
-			mouthIndex--;
-		} 
-		else 
-		{
-			mouthIndex = mouthList.Count-1;
-		}
-		updateMouth ();
-	}
-	
-	public void mouthRight()
-	{
-		Debug.Log ("mouth Right");
-		if (mouthIndex < mouthList.Count-1) 
-		{
-			mouthIndex++;
-		} 
-		else 
-		{
-			mouthIndex = 0;
-		}
-		updateMouth ();
-	}
+//	public void eyeLeft()
+//	{
+//		Debug.Log ("eye Left");
+//		if (eyeIndex != 0) 
+//		{
+//			eyeIndex--;
+//		} 
+//		else 
+//		{
+//			eyeIndex = eyeList.Count-1;
+//		}
+//		updateEye ();
+//	}
+//	
+//	public void eyeRight()
+//	{
+//		Debug.Log ("eye Right");
+//		if (eyeIndex < eyeList.Count-1) 
+//		{
+//			eyeIndex++;
+//		} 
+//		else 
+//		{
+//			eyeIndex = 0;
+//		}
+//		updateEye ();
+//	}
+//
+//	public void mouthLeft()
+//	{
+//		Debug.Log ("mouth Left");
+//		if (mouthIndex != 0) 
+//		{
+//			mouthIndex--;
+//		} 
+//		else 
+//		{
+//			mouthIndex = mouthList.Count-1;
+//		}
+//		updateMouth ();
+//	}
+//	
+//	public void mouthRight()
+//	{
+//		Debug.Log ("mouth Right");
+//		if (mouthIndex < mouthList.Count-1) 
+//		{
+//			mouthIndex++;
+//		} 
+//		else 
+//		{
+//			mouthIndex = 0;
+//		}
+//		updateMouth ();
+//	}
 
 	void updateHead()
 	{
-		headImage.GetComponent<Image> ().sprite = headList [headIndex];
+		switch (gender)
+		{
+		case 0:
+			maleTemplate.transform.FindChild ("Head").GetComponent<SpriteRenderer>().sprite = maleHeads[mHeadIndex];
+			break;
+		case 1:
+			femaleTemplate.transform.FindChild ("Head").GetComponent<SpriteRenderer>().sprite = femaleHeads[fHeadIndex];
+			break;
+		}
 	}
 	void updateTorso()
 	{
-		torsoImage.GetComponent<Image> ().sprite = torsoList [torsoIndex];
+		switch (gender)
+		{
+		case 0:
+			maleTemplate.transform.FindChild ("Torso").GetComponent<SpriteRenderer>().sprite = maleTorsos[mTorsoIndex];
+			break;
+		case 1:
+			femaleTemplate.transform.FindChild ("Torso").GetComponent<SpriteRenderer>().sprite = femaleTorsos[fTorsoIndex];
+			break;
+		}
 	}
 	void updateLeg()
 	{
-		legImage.GetComponent<Image> ().sprite = legList [legIndex];
+		switch (gender)
+		{
+		case 0:
+			maleTemplate.transform.FindChild ("Legs").GetComponent<SpriteRenderer>().sprite = maleLegs[mLegIndex];
+			break;
+		case 1:
+			femaleTemplate.transform.FindChild ("Legs").GetComponent<SpriteRenderer>().sprite = femaleLegs[fLegIndex];
+			break;
+		}
 	}
 	void updateEye()
 	{
@@ -201,11 +349,22 @@ public class CharBuildScript : MonoBehaviour {
 
 	public void saveCharacter()
 	{
-		PlayerPrefs.SetInt ("headIndex", headIndex);
-		PlayerPrefs.SetInt ("torsoIndex", torsoIndex);
-		PlayerPrefs.SetInt ("legIndex", legIndex);
-		PlayerPrefs.SetInt ("mouthIndex", mouthIndex);
-		PlayerPrefs.SetInt ("eyeIndex", eyeIndex);
+		PlayerPrefs.SetInt ("Gender", gender);
+
+		switch (gender)
+		{
+		case 0:
+			PlayerPrefs.SetInt ("HeadIndex", mHeadIndex);
+			PlayerPrefs.SetInt ("TorsoIndex", mTorsoIndex);
+			PlayerPrefs.SetInt ("LegIndex", mLegIndex);
+			break;
+		case 1:
+			PlayerPrefs.SetInt ("HeadIndex", fHeadIndex);
+			PlayerPrefs.SetInt ("TorsoIndex", fTorsoIndex);
+			PlayerPrefs.SetInt ("LegIndex", fLegIndex);
+			break;
+		}
+
 		goToGame ();
 	}
 
@@ -268,5 +427,39 @@ public class CharBuildScript : MonoBehaviour {
 	{
 		category.text = jokes [position].jokeTitle;
 		PlayerPrefs.SetInt ("Category", position);
+	}
+
+	public void ChangeGender()
+	{
+		if (gender == 0)
+		{
+			mHeadIndex = 0;
+			mTorsoIndex = 0;
+			mLegIndex = 0;
+			
+			fHeadIndex = 0;
+			fTorsoIndex = 0;
+			fLegIndex = 0;
+
+			genderButton.GetComponentInChildren<Text>().text = "Female";
+			maleTemplate.SetActive (false);
+			femaleTemplate.SetActive (true);
+			gender = 1;
+		}
+		else
+		{
+			mHeadIndex = 0;
+			mTorsoIndex = 0;
+			mLegIndex = 0;
+			
+			fHeadIndex = 0;
+			fTorsoIndex = 0;
+			fLegIndex = 0;
+
+			genderButton.GetComponentInChildren<Text>().text = "Male";
+			maleTemplate.SetActive (true);
+			femaleTemplate.SetActive (false);
+			gender = 0;
+		}
 	}
 }
