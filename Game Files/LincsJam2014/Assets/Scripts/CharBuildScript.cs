@@ -38,6 +38,7 @@ public class CharBuildScript : MonoBehaviour
 	public int gender = 0;
 
 	public Button genderButton;
+	public Text clubSelection;
 
 	// Use this for initialization
 	void Start () {
@@ -370,10 +371,11 @@ public class CharBuildScript : MonoBehaviour
 
 	void goToGame()
 	{
-		PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
-		if (PlayerPrefs.GetString ("selectedLevel") == "")
-						PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
-		Debug.Log (PlayerPrefs.GetString ("selectedLevel"));
+		PlayerPrefs.SetString ("selectedLevel", clubSelection.text.Replace(" ", ""));
+
+//		if (PlayerPrefs.GetString ("selectedLevel") == "")
+//						PlayerPrefs.SetString ("selectedLevel", "TheatreClub");
+//		Debug.Log (PlayerPrefs.GetString ("selectedLevel"));
 		Application.LoadLevel(PlayerPrefs.GetString("selectedLevel"));
 	}
 
