@@ -16,6 +16,8 @@ public class GUIManager : MonoBehaviour
 	public Text successfulJokes;
 	public Text unsuccessfulJokes;
 
+	public GameObject gameOverObject;
+
 	// Use this for initialization
 	void Start ()
 	{

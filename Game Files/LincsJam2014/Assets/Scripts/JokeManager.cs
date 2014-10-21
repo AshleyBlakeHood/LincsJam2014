@@ -327,6 +327,10 @@ public class JokeManager : MonoBehaviour
 		gameObject.GetComponent<CameraMovement> ().setCamera (1);
 		gameObject.GetComponent<CameraMovement> ().canMoveCamera = false;
 		GameObject.FindGameObjectWithTag ("EndGameTag").GetComponent<EndGameScript> ().RunEndGame (1);
+
+		
+		guiManager.gameOverObject.SetActive (true);
+		guiManager.gameOverObject.GetComponent<GameOverControl> ().GameLost ();
 	}
 
 	void WinGame()
@@ -350,6 +354,9 @@ public class JokeManager : MonoBehaviour
 			femaleTemplate.GetComponent<Animator>().enabled = true;
 			break;
 		}
+
+		guiManager.gameOverObject.SetActive (true);
+		guiManager.gameOverObject.GetComponent<GameOverControl> ().GameWon ();
 	}
 
 	void SpawnFoot()
